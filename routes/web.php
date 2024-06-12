@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectController as PublicProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,13 +21,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('projects', PublicProjectController::class)->only(['index', 'show']);
+
 Route::middleware(['auth', 'verified'])
 ->name('admin.')
 ->prefix('admin')
 ->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('projects', ProjectController::class);
 });
 

@@ -42,4 +42,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function favouriteProjects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
+    public function isFavorite(Project $project)
+    {
+        $finded = in_array($project->id, $this->favouriteprojects->pluck('id')->all());
+
+        return $finded;
+    }
 }
